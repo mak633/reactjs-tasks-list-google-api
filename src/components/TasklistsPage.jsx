@@ -17,7 +17,7 @@ import ExitIcon from 'material-ui/svg-icons/action/exit-to-app';
 import FolderIcon from 'material-ui/svg-icons/file/folder';
 import AddIcon from 'material-ui/svg-icons/content/add';
 import TasksPage from './TasksPage.jsx';
-//import TaskListCreateModal from './TaskListCreateModal.jsx';
+import TaskListCreateModal from './TaskListCreateModal.jsx';
 import './TasklistsPage.less';
 const PropTypes = require('prop-types');
 
@@ -31,9 +31,13 @@ export default class TasklistsPage extends React.Component{
 
   constructor(props) {
     super(props);
-    this.state = getStateFromFlux();
+    this.state = {
+      ...getStateFromFlux(),
+      isCreatingTaskList: false
+    };
+    //this.state = getStateFromFlux();
     this._onChange = this._onChange.bind(this);
-
+    //this.getStateFromFlux = this.getStateFromFlux.bind(this);
   }
   componentWillMount() {
        TaskListsActions.loadTaskLists();
@@ -46,6 +50,18 @@ export default class TasklistsPage extends React.Component{
    componentWillUnmount() {
        TaskListsStore.removeChangeListener(this._onChange);
    }
+   handleAddTaskList() {
+        this.setState({ isCreatingTaskList : true });
+    }
+
+    handleClose() {
+        this.setState({ isCreatingTaskList : false });
+    }
+    handleTaskListSubmit(taskList) {
+        TaskListsActions.createTaskList(taskList);
+
+        this.setState({ isCreatingTaskList : false });
+    }
 
     render() {
         const { router } = this.context;
@@ -103,12 +119,16 @@ export default class TasklistsPage extends React.Component{
                 <div className='TasklistsPage__tasks'>
                   <Route path='/lists/:id' component={TasksPage} />
                 </div>
-
+                <TaskListCreateModal
+                    isOpen={this.state.isCreatingTaskList}
+                    onSubmit={this.handleTaskListSubmit}
+                    onClose={this.handleClose}
+                />
             </div>
         );
     }
     _onChange() {
-          this.setState(getStateFromFlux());
+          this.setState({ ...getStateFromFlux() });
     }
 
 }
