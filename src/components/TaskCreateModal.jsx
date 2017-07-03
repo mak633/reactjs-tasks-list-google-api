@@ -4,74 +4,73 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
-export default class TaskListCreateModal extends React.Component{
+export default class TaskCreateModal extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+       text: ''
+    };
+  }
 
-    constructor(props, context) {
-      super(props, context);
-      this.state = {
-        name: ''
-      };
-    }
-    handleClose() {
+    handleClose = () => {
         const { onClose } = this.props;
 
-        this.setState({ name: '' });
+        this.setState({ text: '' });
 
         if (onClose) {
             onClose();
         }
     }
 
-    handleSubmit() {
+    handleSubmit = () => {
         const { onSubmit } = this.props;
 
         if (onSubmit) {
             onSubmit({
-                name: this.state.name
+                text: this.state.text
             });
         }
 
-        this.setState({ name: '' });
+        this.setState({ text: '' });
     }
 
-    handleTextChange(e) {
+    handleTextChange = (e) => {
         this.setState({
-            name: e.target.value
+            text: e.target.value
         });
     }
 
     render() {
-        const { name } = this.state;
+        const { text } = this.state;
         const { isOpen } = this.props;
-
 
         return (
             <Dialog
-                className='TaskListCreateModal'
+                className='TaskCreateModal'
                 contentStyle={{ maxWidth: 400 }}
                 actions={[
                     <FlatButton
                         label='Cancel'
-                        onTouchTap={this.handleClose.bind(this)}
+                        onTouchTap={this.handleClose}
                     />,
                     <FlatButton
                         primary
                         label='Submit'
-                        disabled={!name}
-                        onTouchTap={this.handleSubmit.bind(this)}
+                        disabled={!text}
+                        onTouchTap={this.handleSubmit}
                     />
                 ]}
                 open={isOpen}
                 onRequestClose={this.handleClose}
             >
-                <h3 className='TaskListCreateModal__modal-title'>Add task list</h3>
+                <h3 className='TaskCreateModal__modal-title'>Add task</h3>
                 <TextField
                     fullWidth
                     ref={c => this.taskInput = c}
-                    value={name}
-                    onChange={this.handleTextChange.bind(this)}
-                    hintText='e.g. movies to watch'
-                    floatingLabelText='Enter task list name'
+                    value={text}
+                    onChange={this.handleTextChange}
+                    hintText='e.g. buy a bottle of milk'
+                    floatingLabelText='Enter task description'
                 />
             </Dialog>
         );

@@ -32,12 +32,10 @@ export default class TasklistsPage extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      ...getStateFromFlux(),
+       ...getStateFromFlux(),
       isCreatingTaskList: false
     };
-    //this.state = getStateFromFlux();
     this._onChange = this._onChange.bind(this);
-    //this.getStateFromFlux = this.getStateFromFlux.bind(this);
   }
   componentWillMount() {
        TaskListsActions.loadTaskLists();
@@ -77,12 +75,12 @@ export default class TasklistsPage extends React.Component{
                             <ListItem
                                 leftIcon={<HomeIcon />}
                                 primaryText="Home"
-                                onClick={router.history.push.bind(null, `/lists`)}
+                                onClick={() => {router.history.push('/lists')}}
                             />
                             <ListItem
                                 leftIcon={<ListIcon />}
                                 primaryText="About"
-                                onClick={router.history.push.bind(null, `/about`)}
+                                onClick={() => {router.history.push('/about')}}
                             />
                         </List>
                         <Divider />
@@ -95,14 +93,14 @@ export default class TasklistsPage extends React.Component{
                                           key={list.id}
                                           leftIcon={<FolderIcon />}
                                           primaryText={list.name}
-                                          onClick={router.history.push.bind(null, `/lists/${list.id}`)}
+                                          onClick={() => {router.history.push(`/lists/${list.id}`)}}
                                       />
                                   )
                               }
                               <ListItem
                                   leftIcon={<AddIcon />}
                                   primaryText="Create new list"
-                                  onClick={this.handleAddTaskList}
+                                  onClick={this.handleAddTaskList.bind(this)}
                               />
 
                          </List>
@@ -121,8 +119,8 @@ export default class TasklistsPage extends React.Component{
                 </div>
                 <TaskListCreateModal
                     isOpen={this.state.isCreatingTaskList}
-                    onSubmit={this.handleTaskListSubmit}
-                    onClose={this.handleClose}
+                    onSubmit={this.handleTaskListSubmit.bind(this)}
+                    onClose={this.handleClose.bind(this)}
                 />
             </div>
         );

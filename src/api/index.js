@@ -12,16 +12,17 @@ export default {
                     'cookie_policy': 'single_host_origin'
                 },
                 authResult => {
-                  if (authResult.error) {
+                    if (authResult.error) {
                         return reject(authResult.error);
                     }
 
                     return gapi.client.load('tasks', 'v1', () => gapi.client.load('plus', 'v1', () => resolve() ) );
                 }
-              );
-            });
-          },
-          listTaskLists() {
+            );
+        });
+    },
+
+    listTaskLists() {
         const request = gapi.client.tasks.tasklists.list();
 
         return new Promise((resolve, reject) => {
@@ -60,5 +61,16 @@ export default {
         });
     },
 
-    
-        }
+    updateTask({ taskListId, taskId, ...params }) {
+        const request = gapi.client.tasks.tasks.update({
+            tasklist : taskListId,
+            task     : taskId,
+            id       : taskId,
+            ...params
+        });
+
+        return new Promise((resolve, reject) => {
+            request.execute(resp => resolve(resp));
+        });
+    }
+}

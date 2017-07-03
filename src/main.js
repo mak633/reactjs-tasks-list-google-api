@@ -5,7 +5,8 @@ import {
   BrowserRouter as Router,
   Route,
   Link,
-  Redirect
+  Redirect,
+  Switch
 } from 'react-router-dom';
 import SessionActions from './actions/SessionActions';
 import SessionStore from './stores/SessionStore';
@@ -26,9 +27,8 @@ window.handleGoogleApiLoaded = () => {
 function renderApp() {
   ReactDOM.render(
     <HashRouter>
-      <Router>
         <MuiThemeProvider>
-        <div className='App'>
+        <Switch>
             <Route exact path='/' component={App}/>
             <Route path='/login' component={LoginPage} />
             <Route render={props => (
@@ -42,20 +42,9 @@ function renderApp() {
                 )
               )}/>
 
-        </div>
+        </Switch>
         </MuiThemeProvider>
-      </Router>
     </HashRouter>,
       document.getElementById('mount-point')
   );
-}
-function requireAuth(nextState, replace) {
-  console.log(4);
-  if (!SessionStore.isLoggedIn()) {
-        console.log(4);
-        replace({
-            pathname: '/login',
-            state: { nextPathname: nextState.location.pathname }
-        });
-    }
 }
